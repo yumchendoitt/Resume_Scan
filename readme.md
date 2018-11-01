@@ -1,6 +1,7 @@
 # Follow The Steps
 1. run init.bat
     - if fail, make sure pip path is in environment path
+    - make sure pip path is in environment path
     - pip.exe should be in \<Path to Python27\>/Scripts
 2. add keyword file into keyword folder
 	- recommended format
