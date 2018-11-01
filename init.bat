@@ -18,5 +18,6 @@ mkdir resumes
 python -m pip install --upgrade pip
 %PIP% install PyPDF2
 %PIP% install xlsxwriter
+%PIP% install docx2txt
 %PIP% install spacy
 python -m spacy download en_core_web_sm

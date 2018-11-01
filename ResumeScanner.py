@@ -18,6 +18,8 @@ data_handler = DataHandler(TITLE)
 for filename in os.listdir(RESUME_FOLDER):
     # output = open('Outputs/' + filename.replace(filename[filename.find('.'):], '.txt'), 'w+')
     resumes = ContentExtractor('/%s/%s' % (RESUME_FOLDER, filename))
+    extractor.new_resume()
+
     # Debugging
     # resumes.go_to_page(0)
     while resumes.has_next_page():
@@ -26,6 +28,7 @@ for filename in os.listdir(RESUME_FOLDER):
         if resumes.is_new_resume() and resumes.curPage != 1:
             data_handler.store(filename, resumes.get_prev_info(), extractor.get_skills())
             # output.write('%s %d: %s\n' % (filename, resumes.prev_startPage, resumes.prev_name))
+            resumes.new()
             extractor.new_resume()
 
         extractor.extract(resumes.cur_content)

@@ -3,6 +3,7 @@ import re
 import os
 import spacy
 import operator
+import docx2txt
 
 
 class ContentExtractor:
@@ -10,6 +11,7 @@ class ContentExtractor:
     pdf = None
     nlp = spacy.load('en_core_web_sm')
     doc = None
+    word_doc = None
 
     curPage = 0
     totalPage = 0
@@ -33,9 +35,13 @@ class ContentExtractor:
     prev_website = ''
 
     def __init__(self, filename):
-        f = open(os.getcwd() + filename, 'rb')
-        self.pdf = PdfFileReader(f)
-        self.totalPage = self.pdf.numPages
+        if filename.endswith('.docx'):
+            self.word_doc = docx2txt.process(os.getcwd() + filename).strip(' ').replace('\n', ' ')
+            self.totalPage = 1
+        elif filename.endswith('.pdf'):
+            f = open(os.getcwd() + filename, 'rb')
+            self.pdf = PdfFileReader(f)
+            self.totalPage = self.pdf.numPages
 
     def get_info(self):
         return self.cur_name, self.cur_email, self.cur_phone, self.cur_address, self.cur_website, self.cur_startPage
@@ -50,12 +56,17 @@ class ContentExtractor:
         return self.curPage < self.totalPage
 
     def next_page(self):
+
         page_num = self.curPage
         self.curPage += 1
-        page = self.pdf.getPage(page_num)
-        page_content = page.extractText()
-        content = page_content.encode('utf-8')
-        content = unicode(str(' '.join(re.findall(r'[\w@.()$-/]+', str(content)))))
+
+        if self.pdf:
+            page = self.pdf.getPage(page_num)
+            page_content = page.extractText()
+            content = page_content.encode('utf-8')
+            content = unicode(str(' '.join(re.findall(r'[\w@.()$-/]+', str(content)))))
+        elif self.word_doc:
+            content = self.word_doc
 
         self.prev_content = self.cur_content
         self.prev_website = self.cur_website
@@ -68,6 +79,22 @@ class ContentExtractor:
         self.cur_content = content
 
         return self
+
+    def new(self):
+        if self.prev_content == self.cur_content:
+            self.cur_content = ''
+        if self.prev_website == self.cur_website:
+            self.cur_website = ''
+        if self.prev_phone == self.cur_phone:
+            self.cur_phone = ''
+        if self.prev_email == self.cur_email:
+            self.cur_email = ''
+        if self.prev_address == self.cur_address:
+            self.cur_address = ''
+        if self.prev_startPage == self.cur_startPage:
+            self.cur_startPage = ''
+        if self.prev_name == self.cur_name:
+            self.cur_name = ''
 
     def go_to_page(self, page):
         self.curPage = page

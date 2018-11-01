@@ -21,7 +21,7 @@ class KeywordExtractor:
                 if word in self.partial_match:
                     self.partial_match.remove(word)
             elif re.search(r'%s' % keyword, word, re.I):
-                if word not in self.exact_match:
+                if word not in self.exact_match and '@' not in word:
                     self.partial_match.add(word.strip('(),'))
 
     def new_resume(self):
