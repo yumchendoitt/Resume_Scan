@@ -21,3 +21,4 @@ python -m pip install --upgrade pip
 %PIP% install docx2txt
 %PIP% install spacy
 python -m spacy download en_core_web_sm
+pause

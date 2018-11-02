@@ -2,9 +2,10 @@
 1. run init.bat
     - if fail
 		- make sure pip path is in environment path
-		- make sure pip path is in environment path
 		- pip.exe should be in \<Path to Python27\>/Scripts
 		- run pip install spacy in command line
+			- You will need to download Visual C++ for spacy
+			- http://aka.ms/vcpython27
 2. add keyword file into keyword folder
 	- recommended format
 		- \<HIRING TITLE\>.txt
